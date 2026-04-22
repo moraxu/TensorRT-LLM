@@ -864,7 +864,9 @@ def find_mm_token_positions(
 
     # If no multimodal tokens found, return empty list
     if not torch.any(mm_mask):
-        return []
+        # Preserve the declared 2-tuple return type so callers can unpack
+        # unconditionally (e.g. `start_positions, special_positions = ...`).
+        return [], []
 
     # Get positions of all multimodal tokens
     mm_positions = torch.where(mm_mask)[0].tolist()
