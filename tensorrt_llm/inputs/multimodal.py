@@ -780,11 +780,15 @@ def find_mm_token_lengths(mm_data: Dict[str, Any],
                     image=item, )
                 modality_token_lengths.append(num_tokens)
             elif modality == "video":
+                video_metadata = None
                 if isinstance(item, tensorrt_llm.inputs.utils.VideoData):
+                    video_metadata = item.metadata
                     item = item.frames
                 assert isinstance(item, list), "Video must be a list of frames"
                 num_tokens = input_processor.get_num_tokens_per_video(
-                    video=item, )
+                    video=item,
+                    video_metadata=video_metadata,
+                )
                 modality_token_lengths.append(num_tokens)
             elif modality == "audio":
                 num_tokens = input_processor.get_num_tokens_per_audio(
