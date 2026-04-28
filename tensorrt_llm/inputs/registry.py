@@ -301,6 +301,7 @@ class BaseMultimodalInputProcessor(ABC):
         self,
         *,
         video: List[Union[Image.Image, torch.Tensor]],
+        video_metadata: Optional[dict] = None,
         **kwargs,
     ):
         """
@@ -308,6 +309,11 @@ class BaseMultimodalInputProcessor(ABC):
 
         This (default) method delegates to the Hugging Face processor's '_get_num_multimodal_tokens' method.
         Accepts a list of PIL Images or CHW ``torch.Tensor`` frames.
+
+        `video_metadata` is consumed here (not forwarded into
+        `get_num_multimodal_tokens`) so subclasses that don't need are unaffected.
+        Subclasses that need `video_metadata` (e.g. Nemotron Nano
+        accounting for audio extracted from video) override this method.
 
         Subclasses can override this method to provide custom logic to calculate the number of tokens.
         """
